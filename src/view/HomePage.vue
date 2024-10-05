@@ -29,20 +29,21 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
+import todoMixins from "@/mixins/todo-mixins.js";
 
-//Data
-const todoList = ref([]);
+//Data & Methods from mixins
+const { todoList, addToLocalStorage } = todoMixins();
 const todoObject = ref({
   id: "",
   title: "",
   from: "",
   to: "",
   createdAt: new Date(),
+  isCompleted: false,
 });
 
 //Methods
-
 //Add Todo
 const addTodo = () => {
   todoObject.value.id = todoList.value.length + 1;
@@ -56,25 +57,9 @@ const addTodo = () => {
     from: "",
     to: "",
     createdAt: new Date(),
+    isCompleted: false,
   };
 };
-
-//Set to localStorage
-const addToLocalStorage = () => {
-  localStorage.setItem("todos", JSON.stringify(todoList.value));
-};
-
-//Update todo list
-const updateTodoList = () => {
-  //try to reserve the todoList value before reset it on re mounted page
-  if (localStorage.getItem("todos")) {
-    todoList.value = JSON.parse(localStorage.getItem("todos"));
-  }
-};
-
-onMounted(() => {
-  updateTodoList();
-});
 </script>
 
 <style scoped lang="scss">
