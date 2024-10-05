@@ -1,45 +1,37 @@
 <template>
   <div class="home">
     <h1>This is home page</h1>
-    <h2>Counter is :: {{ counter }}</h2>
-
-    <button @click="counter++">Increase</button>
-    <button @click="counter--">Decrease</button>
-
-    <br />
-    <br />
-    <button @click="myArr.push(counter)">Push Counter value</button>
+    <hr />
+    <MyComponent />
   </div>
 </template>
 <script setup>
-import { ref, watch } from "vue";
+import MyComponent from "@/components/MyComponent.vue";
+import { provide, ref } from "vue";
 
-const counter = ref(0);
+const username = ref("Hossam AlBadry");
+const age = ref(24);
+const sayHello = () => {
+  console.log("Hello" + " " + username.value);
+};
 
-//Watch on Primitive datatype
-watch(
-  //Watch on which Data (fields)
-  () => {
-    return counter.value;
-  },
-  //Callback function to execute when the watched data changes
-  //it recieves 2 optional arguments the new value and the old value
-  (/* newValue, oldValue */) => {
-    // console.log(`oldValue :: ${oldValue}`);
-    // console.log(`newValue :: ${newValue}`);
-    console.log("counter is :: ", counter.value);
-  }
-);
+const friends = ref([
+  "moaz",
+  "amr",
+  "mahmoud",
+  "abdullah",
+  "mlegy",
+  "lina",
+  "amani",
+  "hossam",
+  "mostafa",
+]);
 
-//Watch on reference datatype like array and object
-//so how we can watch on reference datatype like a array or object ?
-//by adding arguments of object which declare a deep is true instead of false
-const myArr = ref([]);
-watch(
-  () => myArr.value,
-  (newValue) => console.log(newValue),
-  { deep: true } //deep dive on reference datatype like array or object
-);
+// provide(provider name , provider value) from parent component
+provide("userName", username.value);
+provide("userAge", age.value);
+provide("helloMethod", sayHello);
+provide("friendList", friends.value);
 </script>
 
 <style scoped>
