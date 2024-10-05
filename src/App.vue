@@ -1,11 +1,16 @@
 <template>
   <div id="app">
+    <MyNavBar />
     <router-view />
   </div>
 </template>
 
-<script>
-export default {
-  name: "App",
-};
+<script setup>
+import MyNavBar from "@/components/NavBar.vue";
 </script>
+
+<style>
+#app {
+  text-align: center;
+}
+</style>

@@ -1,35 +1,97 @@
 <template>
   <div class="home">
-    <h1>This is home page</h1>
-    <h2>Counter is :: {{ counter }}</h2>
-    <button @click="counter++">Increment</button>
-    <button @click="counter--">Decrement</button>
+    <h1>Add New Todo</h1>
+    <form action="" @submit.prevent="addTodo">
+      <input
+        type="text"
+        v-model="todoObject.title"
+        placeholder="Enter your todo"
+        required
+      />
+      <br />
+      <input
+        type="date"
+        v-model="todoObject.from"
+        placeholder="from"
+        style="margin-top: 20px"
+        required
+      />
+      <input
+        type="date"
+        v-model="todoObject.to"
+        placeholder="to"
+        style="margin-left: 20px; margin-bottom: 20px"
+        required
+      />
+      <br />
+      <input type="submit" id="submit-input" value="Add" />
+    </form>
   </div>
 </template>
 <script setup>
-import { onBeforeMount, onBeforeUpdate, onMounted, onUpdated, ref } from "vue";
+import { onMounted, ref } from "vue";
 
-//Composition API is work faster than the Options API
-//because it access on the function itself and not access on the instance itself like on options API ("this")
-
-const counter = ref(0);
-
-onBeforeMount(() => {
-  console.log("Composition API Before Mount");
+//Data
+const todoList = ref([]);
+const todoObject = ref({
+  id: "",
+  title: "",
+  from: "",
+  to: "",
+  createdAt: new Date(),
 });
+
+//Methods
+
+//Add Todo
+const addTodo = () => {
+  todoObject.value.id = todoList.value.length + 1;
+  todoList.value.push(todoObject.value);
+  addToLocalStorage();
+  alert("todo added successfully");
+  //reset the object value to be able adding another object
+  todoObject.value = {
+    id: "",
+    title: "",
+    from: "",
+    to: "",
+    createdAt: new Date(),
+  };
+};
+
+//Set to localStorage
+const addToLocalStorage = () => {
+  localStorage.setItem("todos", JSON.stringify(todoList.value));
+};
+
+//Update todo list
+const updateTodoList = () => {
+  //try to reserve the todoList value before reset it on re mounted page
+  if (localStorage.getItem("todos")) {
+    todoList.value = JSON.parse(localStorage.getItem("todos"));
+  }
+};
+
 onMounted(() => {
-  console.log("Composition API Mounted");
-});
-onBeforeUpdate(() => {
-  console.log("Composition API Before Update");
-});
-onUpdated(() => {
-  console.log("Composition API Updated");
+  updateTodoList();
 });
 </script>
-<style scoped>
-.home {
-  text-align: center;
-  padding: 20px;
+
+<style scoped lang="scss">
+form {
+  input[type="text"] {
+    width: 50%;
+    padding: 10px;
+    font-size: 20px;
+  }
+  #submit-input {
+    padding: 10px 20px;
+    font-size: 20px;
+    background-color: rgb(43, 52, 43);
+    color: white;
+    border: 1px solid rgb(43, 52, 43);
+    border-radius: 7px;
+    margin-left: 20px;
+  }
 }
 </style>

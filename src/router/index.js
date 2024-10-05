@@ -6,7 +6,16 @@ const routes = [
     path: "/",
     component: () => import("@/view/HomePage.vue"),
     meta: {
-      title: "Home Page",
+      title: "Home",
+    },
+  },
+
+  {
+    name: "Todo List",
+    path: "/todo/list",
+    component: () => import("@/view/ShowTodo.vue"),
+    meta: {
+      title: "Todo List",
     },
   },
 ];
@@ -17,7 +26,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // to and from are both route objects. must call `next`.
+  // to and from are both route objects. after make some validation then  must call `next`.
   document.title = to.meta.title;
   next();
 });
